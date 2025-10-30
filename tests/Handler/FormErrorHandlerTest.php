@@ -96,9 +96,16 @@ class FormErrorHandlerTest extends TestCase
         $builder = $formFactory->createNamedBuilder('foo', FormType::class);
 
         $builder->add('url', TextType::class);
+
+        if (PHP_VERSION_ID >= 80000) {
+            $lengthConstraint = new Length(min: 10);
+        } else {
+            $lengthConstraint = new Length(['min' => 10]);
+        }
+
         $builder->add('txt', TextType::class, [
             'constraints' => [
-                new Length(['min' => 10]),
+                $lengthConstraint,
             ],
         ]);
 
